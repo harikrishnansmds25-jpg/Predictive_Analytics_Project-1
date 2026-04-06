@@ -1,5 +1,4 @@
 # Predictive_Analytics_Project-1
-Mental Health Status Classification from Social Media Text
 🧠 Mental Health Status Classification from Social Media Posts
 > **Academic Research Project · Machine Learning · NLP**  
 > *For Research and Educational Purposes Only — Not Intended for Clinical Diagnosis*
