@@ -562,12 +562,12 @@ footer strong { color: #d4cec8; }
 <nav class="nav-tabs">
   <div class="container">
     <div class="nav-tabs-inner">
-      <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
-      <button class="tab-btn" onclick="showTab('methodology')">Methodology</button>
-      <button class="tab-btn" onclick="showTab('code')">Source Code</button>
-      <button class="tab-btn" onclick="showTab('results')">Results &amp; Metrics</button>
-      <button class="tab-btn" onclick="showTab('demo')">Live Demo</button>
-      <button class="tab-btn" onclick="showTab('ethics')">Ethics &amp; Limitations</button>
+      <button class="tab-btn active" type="button" onclick="showTab('overview', this)">Overview</button>
+      <button class="tab-btn" type="button" onclick="showTab('methodology', this)">Methodology</button>
+      <button class="tab-btn" type="button" onclick="showTab('code', this)">Source Code</button>
+      <button class="tab-btn" type="button" onclick="showTab('results', this)">Results &amp; Metrics</button>
+      <button class="tab-btn" type="button" onclick="showTab('demo', this)">Live Demo</button>
+      <button class="tab-btn" type="button" onclick="showTab('ethics', this)">Ethics &amp; Limitations</button>
     </div>
   </div>
 </nav>
@@ -1449,19 +1449,21 @@ Run this file directly: python train_model.py
 
 <script>
 // ─── TAB NAVIGATION ─────────────────────────────────────────────────────────
-function showTab(id) {
+function showTab(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  const activeBtn = btn || event?.target;
+  if (activeBtn) activeBtn.classList.add('active');
 }
 
 // ─── CODE NAVIGATION ─────────────────────────────────────────────────────────
-function showCode(id) {
+function showCode(id, btn) {
   document.querySelectorAll('.code-block-wrapper').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.code-nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('code-' + id).classList.add('active');
-  event.target.classList.add('active');
+  const activeBtn = btn || event?.target;
+  if (activeBtn) activeBtn.classList.add('active');
 }
 
 // ─── DEMO EXAMPLES ──────────────────────────────────────────────────────────
