@@ -689,12 +689,12 @@ footer strong { color: #d4cec8; }
   <p style="margin-bottom:1rem;font-size:0.95rem;color:var(--ink-soft);">Actual repo files referenced here: <a href="app.py">app.py</a>, <a href="train_model.py">train_model.py</a>, and <a href="model.pkl">model.pkl</a>.</p>
 
   <div class="code-nav">
-    <button class="code-nav-btn active" onclick="showCode('imports')">01 · Imports</button>
-    <button class="code-nav-btn" onclick="showCode('preprocess')">02 · Preprocessing</button>
-    <button class="code-nav-btn" onclick="showCode('vectorize')">03 · TF-IDF</button>
-    <button class="code-nav-btn" onclick="showCode('model')">04 · SVM Model</button>
-    <button class="code-nav-btn" onclick="showCode('evaluate')">05 · Evaluation</button>
-    <button class="code-nav-btn" onclick="showCode('pipeline')">06 · Full Pipeline</button>
+    <button class="code-nav-btn active" type="button" onclick="showCode('imports', this)">01 · Imports</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('preprocess', this)">02 · Preprocessing</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('vectorize', this)">03 · TF-IDF</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('model', this)">04 · SVM Model</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('evaluate', this)">05 · Evaluation</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('pipeline', this)">06 · Full Pipeline</button>
   </div>
 
   <!-- 01 Imports -->
@@ -2547,21 +2547,22 @@ footer strong { color: #d4cec8; }
 <div class="container">
   <h2 class="section-title">Complete Source Code</h2>
   <p class="section-subtitle">Fully documented, academic-quality Python implementation. Each module is self-contained and importable.</p>
+  <p style="margin-bottom:1rem;font-size:0.95rem;color:var(--ink-soft);">Actual repo files referenced here: <a href="app.py">app.py</a>, <a href="train_model.py">train_model.py</a>, and <a href="model.pkl">model.pkl</a>.</p>
 
   <div class="code-nav">
-    <button class="code-nav-btn active" onclick="showCode('imports')">01 · Imports</button>
-    <button class="code-nav-btn" onclick="showCode('preprocess')">02 · Preprocessing</button>
-    <button class="code-nav-btn" onclick="showCode('vectorize')">03 · TF-IDF</button>
-    <button class="code-nav-btn" onclick="showCode('model')">04 · SVM Model</button>
-    <button class="code-nav-btn" onclick="showCode('evaluate')">05 · Evaluation</button>
-    <button class="code-nav-btn" onclick="showCode('pipeline')">06 · Full Pipeline</button>
+    <button class="code-nav-btn active" type="button" onclick="showCode('imports', this)">01 · Imports</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('preprocess', this)">02 · Preprocessing</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('vectorize', this)">03 · TF-IDF</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('model', this)">04 · SVM Model</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('evaluate', this)">05 · Evaluation</button>
+    <button class="code-nav-btn" type="button" onclick="showCode('pipeline', this)">06 · Full Pipeline</button>
   </div>
 
   <!-- 01 Imports -->
   <div id="code-imports" class="code-block-wrapper active">
     <div class="code-header">
       <div class="code-dots"><span></span><span></span><span></span></div>
-      <span class="code-filename">mental_health_classifier.py · Section 1: Setup &amp; Imports</span>
+      <span class="code-filename">train_model.py · Section 1: Setup &amp; Imports</span>
     </div>
     <pre><code><span class="cm"># ═══════════════════════════════════════════════════════════════════════════════
 # Mental Health Status Classification from Social Media
@@ -2635,7 +2636,7 @@ print(<span class="str">f"📦 scikit-learn pipeline ready for 4-class classific
   <div id="code-preprocess" class="code-block-wrapper">
     <div class="code-header">
       <div class="code-dots"><span></span><span></span><span></span></div>
-      <span class="code-filename">mental_health_classifier.py · Section 2: Text Preprocessing</span>
+      <span class="code-filename">train_model.py · Section 2: Text Preprocessing</span>
     </div>
     <pre><code><span class="kw">class</span> <span class="cl">TextPreprocessor</span>:
     <span class="str">"""
@@ -2747,7 +2748,7 @@ print(<span class="str">f"📦 scikit-learn pipeline ready for 4-class classific
   <div id="code-vectorize" class="code-block-wrapper">
     <div class="code-header">
       <div class="code-dots"><span></span><span></span><span></span></div>
-      <span class="code-filename">mental_health_classifier.py · Section 3: TF-IDF Vectorisation</span>
+      <span class="code-filename">train_model.py · Section 3: TF-IDF Vectorisation</span>
     </div>
     <pre><code><span class="kw">def</span> <span class="fn">build_tfidf_vectorizer</span>() -> TfidfVectorizer:
     <span class="str">"""
@@ -2827,7 +2828,7 @@ print(<span class="str">f"📦 scikit-learn pipeline ready for 4-class classific
   <div id="code-model" class="code-block-wrapper">
     <div class="code-header">
       <div class="code-dots"><span></span><span></span><span></span></div>
-      <span class="code-filename">mental_health_classifier.py · Section 4: SVM Classifier + Normal Guard</span>
+      <span class="code-filename">train_model.py · Section 4: SVM Classifier + Normal Guard</span>
     </div>
     <pre><code><span class="kw">class</span> <span class="cl">MentalHealthSVMClassifier</span>:
     <span class="str">"""
@@ -2936,7 +2937,7 @@ print(<span class="str">f"📦 scikit-learn pipeline ready for 4-class classific
   <div id="code-evaluate" class="code-block-wrapper">
     <div class="code-header">
       <div class="code-dots"><span></span><span></span><span></span></div>
-      <span class="code-filename">mental_health_classifier.py · Section 5: Evaluation & Metrics</span>
+      <span class="code-filename">train_model.py · Section 5: Evaluation & Metrics</span>
     </div>
     <pre><code><span class="kw">def</span> <span class="fn">evaluate_classifier</span>(classifier: MentalHealthSVMClassifier,
                           X_test: list, y_test: pd.Series) -> dict:
@@ -3031,16 +3032,16 @@ print(<span class="str">f"📦 scikit-learn pipeline ready for 4-class classific
   <div id="code-pipeline" class="code-block-wrapper">
     <div class="code-header">
       <div class="code-dots"><span></span><span></span><span></span></div>
-      <span class="code-filename">mental_health_classifier.py · Section 6: Complete Executable Pipeline</span>
+      <span class="code-filename">train_model.py · Section 6: Complete Executable Pipeline</span>
     </div>
     <pre><code><span class="cm">"""
 Complete end-to-end execution pipeline.
-Run this file directly: python mental_health_classifier.py
+Run this file directly: python train_model.py
 """</span>
 
 <span class="kw">if</span> __name__ == <span class="str">'__main__'</span>:
 
-    DATASET_PATH = <span class="str">'/kaggle/input/sentiment-analysis-for-mental-health/Combined Data.csv'</span>
+    DATASET_PATH = <span class="str">'mental_health.csv'</span>
     CONFIDENCE_THRESHOLD = <span class="num">0.45</span>  <span class="cm"># Tune this to balance sensitivity vs specificity</span>
     TEST_SIZE = <span class="num">0.20</span>
     RANDOM_STATE = <span class="num">42</span>
