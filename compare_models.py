@@ -155,6 +155,5 @@ for i in range(1, len(table_data)):
     tbl[(i, 1)].set_facecolor('#dce8f7')
     tbl[(i, 2)].set_facecolor('#fde9d9')
 ax6.set_title('F  |  Model Trade-off Summary', fontweight='bold', loc='left', pad=10)
-
 fig.savefig('model_comparison.png', dpi=150, bbox_inches='tight')
 print("\n✓ Saved  →  model_comparison.png")
