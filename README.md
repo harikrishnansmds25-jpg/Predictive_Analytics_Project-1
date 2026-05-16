@@ -26,7 +26,7 @@ Category	Description
 
 The project is deployed as an interactive HTML-based web application.
 
-🔗 Live App
+🔗 https://harikrishnansmds25-jpg.github.io/Predictive_Analytics_Project-1/
 
 Launch Application
 
