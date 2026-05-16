@@ -1,171 +1,242 @@
-# Predictive_Analytics_Project-1
+Predictive_Analytics_Project-1
+Mental Health Status Classification from Social Media Posts
 
-# 🧠 Mental Health Status Classification from Social Media Posts
+Academic Research Project · Machine Learning · NLP
+For Research and Educational Purposes Only — Not Intended for Clinical Diagnosis
 
-> **Academic Research Project · Machine Learning · NLP**  
-> *For Research and Educational Purposes Only — Not Intended for Clinical Diagnosis*
+📌 Overview
 
----
+This project presents an automated 4-class text classification system designed to detect early mental health indicators from anonymized social media posts.
 
-## 📌 Overview
+Millions of users share thoughts, emotions, and experiences online. Many posts contain subtle linguistic markers of psychological distress, making manual monitoring impractical at scale.
 
-This project builds an automated **4-class text classification system** to detect early mental health signals in anonymised social media posts. Online platforms host millions of posts containing subtle linguistic signals of psychological distress — manual moderation cannot scale. This system addresses that gap using a classical NLP + ML pipeline that is fast, interpretable, and CPU-trainable.
+This project addresses that challenge using a classical NLP + Machine Learning pipeline that is:
 
-| Category | Description |
-|----------|-------------|
-| 😞 **Depression** | Persistent sadness, hopelessness, loss of interest or energy |
-| 😰 **Anxiety** | Excessive worry, panic, fear or nervousness disrupting daily life |
-| 😨 **PTSD** | Post-traumatic patterns: flashbacks, hypervigilance, avoidance |
-| 🙂 **Normal** | Everyday posts with no significant mental health distress indicators |
+Fast and CPU-efficient
+Interpretable
+Academically reproducible
+Suitable for research-scale deployment
+🎯 Classification Categories
+Category	Description
+😞 Depression	Persistent sadness, hopelessness, loss of interest or low energy
+😰 Anxiety	Excessive worry, panic, fear, or nervousness disrupting daily life
+😨 PTSD	Flashbacks, hypervigilance, avoidance, trauma-related distress
+🙂 Normal	Everyday posts with no major mental health distress indicators
+🌐 Live Deployment
 
----
+The project is deployed as an interactive HTML-based web application.
 
-## 📁 Repository Contents
+🔗 Live App
 
-| File | Description |
-|------|-------------|
-| `index.html` | Deployed interactive web application — includes project overview, methodology, live demo, results, and ethics pages |
-| `MentalHealthClassification_Final.pptx` | Full academic presentation (24 slides) covering problem statement, methodology, results, screenshots, and conclusions |
+Launch Application
 
----
+Deployment Type
 
-## 📊 Dataset
+✅ Static HTML Deployment using GitHub Pages
 
-- **Source:** Kaggle — *Sentiment Analysis for Mental Health* (anonymised Reddit & Twitter posts)
-- **Total Samples:** 5,957 anonymised social media posts
-- **Balance:** ~1,190 posts per class (balanced)
-- **Features:** `text`, `title`, `target`
+The deployed website includes:
 
-### Preprocessing Steps
-1. Remove duplicates and posts under 10 characters
-2. Filter extreme length outliers (top 1%)
-3. Standardise label column to canonical values
-4. Lowercase, strip URLs, HTML tags & punctuation
-5. Remove NLTK stopwords; apply WordNet lemmatisation
-6. Preserve negations via bigrams (`ngram_range=(1,2)`)
+Project Overview
+Methodology
+Results Dashboard
+Interactive Demo
+Ethics & Limitations
+📁 Repository Contents
+File	Description
+index.html	HTML deployed interactive web application
+MentalHealthClassification_Final.pptx	Final academic project presentation
+README.md	Project documentation
+Model notebooks/scripts	Data preprocessing, training, evaluation
+📊 Dataset
 
----
+Source: Kaggle — Sentiment Analysis for Mental Health
+(Anonymized Reddit & Twitter posts)
 
-## ⚙️ Methodology
+Dataset Statistics
+Total Samples: 5,957
+Classes: 4
+Balanced Distribution: ~1,190 per class
+Features
+Post text
+Title
+Target label
+🧹 Data Preprocessing
 
-### Pipeline
+The dataset underwent extensive preprocessing:
 
-```
-Raw Text → Clean & Preprocess → TF-IDF Vectorise → SVM Classify → Evaluate → Ethical Review
-```
+Duplicate removal
+Filtering posts under 10 characters
+Outlier length filtering
+Label standardization
+Lowercasing
+URL & HTML removal
+Punctuation stripping
+Stopword removal
+WordNet lemmatization
+Bigram preservation for negation handling
+⚙️ Methodology
+NLP Pipeline
 
-### TF-IDF Vectorisation
+Raw Text
+⬇
+Clean & Preprocess
+⬇
+TF-IDF Vectorization
+⬇
+SVM Classification
+⬇
+Evaluation
+⬇
+Ethical Review
 
-Converts text into high-dimensional numerical features using term frequency weighted by inverse document frequency.
+🔍 Feature Engineering
+TF-IDF Vectorizer Parameters
+Parameter	Value
+max_features	8000
+ngram_range	(1,2)
+min_df	3
+max_df	0.85
+sublinear_tf	True
 
-| Parameter | Value | Rationale |
-|-----------|-------|-----------|
-| `max_features` | 8,000 | Most informative unigrams + bigrams |
-| `ngram_range` | (1, 2) | Captures word-pairs like *"not happy"* |
-| `min_df` | 3 | Filters noise (rare terms) |
-| `max_df` | 0.85 | Filters domain-generic words |
-| `sublinear_tf` | True | Log scaling prevents long posts dominating |
+This captures:
 
-### Support Vector Machine
+Important keywords
+Contextual word pairs
+Negation patterns such as “not happy”
+🤖 Model
+Support Vector Machine
 
-- **Model:** `LinearSVC` wrapped in `CalibratedClassifierCV` (5-fold CV) for probability scores
-- **Strategy:** One-vs-rest multiclass
-- **Class weighting:** `balanced` — automatically corrects for any imbalance
-- **Normal Guard:** If no mental health class confidence exceeds `0.45`, post is classified as *Normal* — key fix for over-prediction
+Classifier:
+LinearSVC + CalibratedClassifierCV
 
-### Why TF-IDF + SVM over BERT?
-- Fully interpretable feature weights
-- Trains in **< 30 seconds on CPU** — no GPU required
-- Reproducible and academically transparent
-- ~5–8% accuracy trade-off is acceptable for an early-support research tool
+Configuration
+Multiclass strategy: One-vs-Rest
+5-fold cross-validation
+Balanced class weighting
+Probability calibration
+Normal Guard
 
----
+A confidence threshold of 0.45 ensures that low-confidence distress predictions are safely classified as Normal, reducing overprediction.
 
-## 📈 Results
+❓ Why TF-IDF + SVM Instead of BERT?
 
-| Category | Precision | Recall | Specificity | F1-Score |
-|----------|-----------|--------|-------------|----------|
-| Depression | 0.82 | 0.80 | 0.91 | 0.81 |
-| Anxiety | 0.78 | 0.77 | 0.92 | 0.77 |
-| PTSD | 0.75 | 0.76 | 0.94 | 0.75 |
-| **Normal ★** | **0.89** | **0.91** | **0.93** | **0.90** |
-| **Macro Avg** | **0.81** | **0.81** | **0.93** | **0.81** |
+This project prioritizes:
 
-**Key highlights:**
-- ✅ Primary design target **MET**: 93% Specificity on Normal class (TNR ≥ 0.90)
-- ✅ Cross-validation F1-Macro: `0.80 ± 0.02` (5-fold) — stable generalisation
-- ✅ Training time: **< 30 seconds** on CPU only
-- ✅ Vocabulary: 8,000 features
+✅ Interpretability
+✅ Faster CPU training (<30 sec)
+✅ Academic transparency
+✅ Lower computational requirements
 
----
+While transformer models may improve accuracy by ~5–8%, classical ML remains ideal for reproducible academic research.
 
-## 🌐 Deployed Web Application
+📈 Results
+Category	Precision	Recall	Specificity	F1-Score
+Depression	0.82	0.80	0.91	0.81
+Anxiety	0.78	0.77	0.92	0.77
+PTSD	0.75	0.76	0.94	0.75
+Normal ⭐	0.89	0.91	0.93	0.90
+Macro Avg	0.81	0.81	0.93	0.81
+✅ Key Highlights
+93% Normal Class Specificity
+Cross-validation Macro F1: 0.80 ± 0.02
+Training time under 30 seconds
+8,000 feature vocabulary
+Stable multiclass performance
+💻 Web Application Features
 
-The project is deployed as an interactive academic website (`index.html`) featuring:
+The deployed HTML application includes:
 
-- **Overview Page** — 4 classification categories with colour-coded cards and problem statement
-- **Methodology Page** — Pipeline diagram and detailed technical steps
-- **Results & Metrics Page** — Full classification report with KPI cards
-- **Live Demo** — Lexical Approximation Engine for real-time classification
-- **Ethics & Limitations Page** — Responsible AI considerations
+📖 Overview Page
 
-**Demo Examples:**
+Project motivation and category explanations
 
-> *"Had such a fun day hiking with friends today!"* → ✔ **NORMAL** — 100% Confidence
+⚙️ Methodology Page
 
-> *"Every loud sound makes me jump. I can't sleep without nightmares."* → ✔ **PTSD** — 100% Confidence
+Pipeline diagrams and model workflow
 
----
+📊 Results Dashboard
 
-## ⚠️ Ethics & Limitations
+Performance metrics and evaluation summaries
 
-| Concern | Details |
-|---------|---------|
-| **Not a Diagnostic Tool** | Classifies text patterns, not individuals. Must NEVER be used for clinical, legal, or insurance decisions. |
-| **Data Privacy** | All posts are fully anonymised. No names, usernames, or location data retained. |
-| **Bias & Fairness** | Training data is skewed toward English-speaking Western populations. May underperform on non-standard dialects. |
-| **False Negative Risk** | At 75–80% recall, ~20–25% of at-risk posts may be missed. Human review remains essential. |
-| **Intended Use** | Research trend analysis, content moderation support, early-warning population signals only. |
-| **Prohibited Use** | Individual profiling or surveillance. |
+🧪 Live Demo
 
----
+Real-time lexical approximation classifier
 
-## 🔭 Future Work
+⚠️ Ethics Page
 
-- **BERT Fine-tuning** — Fine-tune BERT / Mental-RoBERTa for 5–8% accuracy gain
-- **Multilingual Support** — Extend to non-English datasets
-- **Temporal Retraining** — Automated pipeline with concept-drift detection
-- **Clinical Validation** — Collaborate with mental health professionals
-- **Explainability** — SHAP/LIME integration for token-level explanations
-- **Real-time API** — REST API for social platform moderation pipelines
+Responsible AI use and limitations
 
----
+Example Predictions
 
-## 🛠️ Tech Stack
+Input:
+"Had such a fun day hiking with friends today!"
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange?logo=scikit-learn)
-![NLTK](https://img.shields.io/badge/NLTK-NLP-green)
-![HTML5](https://img.shields.io/badge/HTML5-Web-red?logo=html5)
+Prediction:
+✔ NORMAL
 
-- **Language:** Python 3.11
-- **ML:** scikit-learn (`LinearSVC`, `CalibratedClassifierCV`, `TfidfVectorizer`)
-- **NLP:** NLTK (`stopwords`, `WordNetLemmatizer`)
-- **Frontend:** HTML5, CSS3, JavaScript (vanilla)
+Input:
+"Every loud sound makes me jump. I can't sleep without nightmares."
 
----
+Prediction:
+✔ PTSD
 
-## 📚 References
+⚠️ Ethics & Limitations
+Concern	Details
+Not a Diagnostic Tool	For research only
+Privacy	Fully anonymized data
+Bias	English-language dataset limitations
+False Negatives	Human review remains essential
+Intended Use	Trend analysis & moderation support
+Prohibited Use	Individual profiling or surveillance
+🔭 Future Work
+BERT / Mental-RoBERTa fine-tuning
+Multilingual classification
+Concept drift detection
+Clinical validation
+Explainability using SHAP/LIME
+REST API deployment
+🛠️ Tech Stack
 
-1. Coppersmith, G., Dredze, M., & Harman, C. (2014). *Quantifying mental health signals in Twitter.* ACL Workshop on CL & Clinical Psychology.
-2. Gkotsis, G., et al. (2017). *Characterisation of mental health conditions in social media using informed deep learning.* Scientific Reports, 7(1), 45141.
-3. Losada, D. E., & Crestani, F. (2016). *A test collection for research on depression and language use.* CLEF.
-4. Vapnik, V. N. (1995). *The Nature of Statistical Learning Theory.* Springer.
-5. Pedregosa, F., et al. (2011). *Scikit-learn: Machine Learning in Python.* JMLR, 12, 2825–2830.
-6. Bird, S., Klein, E., & Loper, E. (2009). *Natural Language Processing with Python.* O'Reilly.
-7. Kaggle Dataset — *Sentiment Analysis for Mental Health* (anonymised Reddit/Twitter posts).
+Languages & Frameworks
 
----
+Python 3.11
+HTML5
+CSS3
+JavaScript
 
-> **Academic Research Project · Department of Computer Science**  
-> *For Research and Educational Purposes Only · Not Intended for Clinical Diagnosis*
+Libraries
+
+scikit-learn
+NLTK
+NumPy
+Pandas
+📚 References
+Coppersmith et al. (2014)
+Gkotsis et al. (2017)
+Losada & Crestani (2016)
+Vapnik (1995)
+Pedregosa et al. (2011)
+Bird, Klein & Loper (2009)
+👥 Contributors
+Harikrishnan
+Umaparvathy C S
+Krithika S
+🎓 Academic Context
+
+Department of Computer Science
+Predictive Analytics Research Project
+
+📜 Disclaimer
+
+This project is strictly intended for:
+
+Academic research
+Educational demonstration
+NLP experimentation
+
+It must not be used for:
+
+Clinical diagnosis
+Medical decision-making
+Insurance/legal judgments
+Personal surveillance
