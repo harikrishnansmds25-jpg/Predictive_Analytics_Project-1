@@ -1,0 +1,128 @@
+import re
+import warnings
+import numpy as np
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+warnings.filterwarnings('ignore')
+
+# ── Config ────────────────────────────────────────────────────────────────────
+DATA_PATH = "data_to_be_cleansed.csv"
+
+# Label mapping based on dataset analysis
+LABEL_MAP = {
+    0: 'Stress',
+    1: 'Depression',
+    2: 'Bipolar',
+    3: 'Pers. Disorder',
+    4: 'Anxiety',
+}
+ORDER   = ['Depression', 'Anxiety', 'Stress', 'Bipolar', 'Pers. Disorder']
+PALETTE = {
+    'Depression':    '#5b7fc1',
+    'Anxiety':       '#e07b54',
+    'Stress':        '#f5c842',
+    'Bipolar':       '#6bb58c',
+    'Pers. Disorder': '#c16b8a',
+}
+
+# ── 1. Load & Clean ───────────────────────────────────────────────────────────
+df = pd.read_csv(DATA_PATH)
+df['label']     = df['target'].map(LABEL_MAP)
+df['full_text'] = df['title'].fillna('') + ' ' + df['text'].fillna('')
+df              = df.dropna(subset=['full_text'])
+df['full_text'] = df['full_text'].str.strip()
+
+# ── 2. Feature Engineering ────────────────────────────────────────────────────
+df['word_count']   = df['full_text'].apply(lambda x: len(x.split()))
+df['avg_wlen']     = df['full_text'].apply(
+    lambda x: np.mean([len(w) for w in x.split()]) if x.split() else 0)
+df['exclaim']      = df['full_text'].str.count('!')
+df['question']     = df['full_text'].str.count(r'\?')
+df['unique_words'] = df['full_text'].apply(lambda x: len(set(x.lower().split())))
+
+def save_individual_plot(fig, filename):
+    """Helper to save and close figures cleanly for memory efficiency."""
+    plt.tight_layout()
+    fig.savefig(filename, dpi=150, bbox_inches='tight')
+    plt.close(fig)
+    print(f"✓ Saved → {filename}")
+
+# ── 3. Panel Generation ───────────────────────────────────────────────────────
+
+# Panel 1 — Class distribution
+fig, ax = plt.subplots(figsize=(8, 5))
+counts = df['label'].value_counts()[ORDER]
+bars = ax.bar(ORDER, counts.values, color=[PALETTE[l] for l in ORDER], edgecolor='white')
+for bar, v in zip(bars, counts.values):
+    ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 5, str(int(v)), 
+            ha='center', fontweight='bold')
+ax.set_title('1 | Class Distribution', fontweight='bold', loc='left')
+ax.set_ylabel('Post Count')
+plt.xticks(rotation=15)
+sns.despine(ax=ax)
+save_individual_plot(fig, '01_class_distribution.png')
+
+# Panel 2 — Word count distribution
+fig, ax = plt.subplots(figsize=(8, 5))
+for lbl in ORDER:
+    ax.hist(df[df['label'] == lbl]['word_count'], bins=45, alpha=0.5, 
+            color=PALETTE[lbl], label=lbl, density=True)
+ax.set_title('2 | Word Count Distribution', fontweight='bold', loc='left')
+ax.set_xlabel('Words per Post')
+ax.set_ylabel('Density')
+ax.set_xlim(0, 800)
+ax.legend()
+sns.despine(ax=ax)
+save_individual_plot(fig, '02_word_count_dist.png')
+
+# Panel 3 — Box plot word count
+fig, ax = plt.subplots(figsize=(8, 5))
+data_box = [df[df['label'] == l]['word_count'].values for l in ORDER]
+bp = ax.boxplot(data_box, patch_artist=True, labels=ORDER,
+                medianprops=dict(color='white', linewidth=2),
+                flierprops=dict(marker='o', markersize=2, alpha=0.3))
+for patch, lbl in zip(bp['boxes'], ORDER):
+    patch.set_facecolor(PALETTE[lbl])
+ax.set_title('3 | Word Count Spread', fontweight='bold', loc='left')
+ax.set_ylabel('Word Count')
+plt.xticks(rotation=15)
+sns.despine(ax=ax)
+save_individual_plot(fig, '03_word_count_boxplot.png')
+
+# Panel 4 — Avg word length
+fig, ax = plt.subplots(figsize=(8, 5))
+means = df.groupby('label')['avg_wlen'].mean()[ORDER]
+stds  = df.groupby('label')['avg_wlen'].std()[ORDER]
+ax.bar(ORDER, means.values, yerr=stds.values, capsize=4, color=[PALETTE[l] for l in ORDER])
+ax.set_title('4 | Avg Word Length (±std)', fontweight='bold', loc='left')
+ax.set_ylabel('Avg chars / word')
+plt.xticks(rotation=15)
+sns.despine(ax=ax)
+save_individual_plot(fig, '04_avg_word_length.png')
+
+# Panel 5 — Punctuation heatmap
+fig, ax = plt.subplots(figsize=(8, 5))
+punc = df.groupby('label')[['exclaim', 'question']].mean().loc[ORDER]
+sns.heatmap(punc, annot=True, fmt='.2f', cmap='YlOrRd', ax=ax, linewidths=0.6)
+ax.set_title('5 | Avg Punctuation per Post', fontweight='bold', loc='left')
+ax.set_xticklabels(['Exclamations (!)', 'Questions (?)'])
+save_individual_plot(fig, '05_punctuation_heatmap.png')
+
+# Panel 6 — Unique words
+fig, ax = plt.subplots(figsize=(8, 5))
+u_means = df.groupby('label')['unique_words'].mean()[ORDER]
+ax.barh(ORDER, u_means.values, color=[PALETTE[l] for l in ORDER])
+for i, v in enumerate(u_means.values):
+    ax.text(v + 1, i, f'{v:.1f}', va='center')
+ax.set_title('6 | Avg Unique Words per Post', fontweight='bold', loc='left')
+ax.set_xlabel('Avg unique words')
+sns.despine(ax=ax)
+save_individual_plot(fig, '06_unique_words.png')
+
+print("="*40)
+print("EDA COMPLETE: All files generated.")
+print("="*40)
